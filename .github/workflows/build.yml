@@ -37,6 +37,9 @@ jobs:
           toolchain: stable
       - name: Build
         run: cargo build --release --target ${{ matrix.cargo_target }}
+      - name: Install sed
+        if: ${{ startsWith(matrix.ci_image, 'macos') }}
+        run: brew install gnu-sed
       - name: Pack
         run: |
           ${{ matrix.sed_command }} -i '/^entrypoint =/centrypoint = "./${{ env.PACKAGE_NAME }}"' colink.toml
