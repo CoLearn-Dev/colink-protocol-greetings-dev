@@ -35,14 +35,16 @@ jobs:
         id: sha256
         run: echo "sha256=`shasum -a 256 ${{ env.PACKAGE_NAME }}-linux-x86_64.tar.gz | awk '{ print $1 }'`" >> $GITHUB_OUTPUT
       - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v6
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ env.PACKAGE_NAME }}-linux-x86_64.tar.gz
-          asset_name: ${{ env.PACKAGE_NAME }}-linux-x86_64.tar.gz
-          asset_content_type: application/tar+gzip
+          script: |
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: '${{ github.event.release.id }}'
+              name: '${{ env.PACKAGE_NAME }}-linux-x86_64.tar.gz'
+              data: await fs.readFile('${{ env.PACKAGE_NAME }}-linux-x86_64.tar.gz')
+            })
     outputs:
       sha256-linux-x86_64: ${{ steps.sha256.outputs.sha256 }}
 
