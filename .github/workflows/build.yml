@@ -17,9 +17,11 @@ jobs:
           - platform: linux-x86_64
             ci_image: ubuntu-20.04
             cargo_target: x86_64-unknown-linux-gnu
+            sed_command: sed -i
           - platform: macos-x86_64
             ci_image: macos-12
             cargo_target: x86_64-apple-darwin
+            sed_command: sed -i ''
     runs-on: ${{ matrix.ci_image }}
     defaults:
       run:
@@ -37,7 +39,7 @@ jobs:
         run: cargo build --release --target ${{ matrix.cargo_target }}
       - name: Pack
         run: |
-          sed -i '/^entrypoint =/centrypoint = "./${{ env.PACKAGE_NAME }}"' colink.toml
+          ${{ matrix.sed_command }} '/^entrypoint =/centrypoint = "./${{ env.PACKAGE_NAME }}"' colink.toml
           cp target/${{ matrix.cargo_target }}/release/${{ env.PACKAGE_NAME }} ./
           tar -zcvf ${{ env.PACKAGE_NAME }}-${{ matrix.platform }}.tar.gz ${{ env.PACKAGE_NAME }} colink.toml
       - name: Sha256
