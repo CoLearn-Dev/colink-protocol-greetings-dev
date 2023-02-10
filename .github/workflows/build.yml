@@ -47,13 +47,14 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            github.rest.issues.createComment({
+            const fs = require('fs').promises;
+            github.rest.repos.uploadReleaseAsset({
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: ${{ github.event.release.id }},
               name: '${{ env.PACKAGE_NAME }}-${{ matrix.platform }}.tar.gz',
               data: await fs.readFile('${{ env.PACKAGE_NAME }}-${{ matrix.platform }}.tar.gz')
-            })
+            });
     outputs:
       sha256: ${{ steps.sha256.outputs.sha256 }}
 
