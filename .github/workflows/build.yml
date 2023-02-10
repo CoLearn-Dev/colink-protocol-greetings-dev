@@ -51,7 +51,7 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               release_id: ${{ github.event.release.id }},
-              name: ${{ env.PACKAGE_NAME }}-${{ matrix.platform }}.tar.gz,
+              name: '${{ env.PACKAGE_NAME }}-${{ matrix.platform }}.tar.gz',
               data: await fs.readFile('${{ env.PACKAGE_NAME }}-${{ matrix.platform }}.tar.gz')
             })
     outputs:
