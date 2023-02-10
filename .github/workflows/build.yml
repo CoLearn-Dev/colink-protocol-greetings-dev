@@ -61,7 +61,7 @@ jobs:
               data: await fs.readFile('${{ env.PACKAGE_NAME }}-${{ matrix.platform }}.tar.gz')
             });
     outputs:
-      sha256: ${{ steps.sha256.outputs.sha256 }}
+      sha256-${{ matrix.platform }}: ${{ steps.sha256.outputs.sha256 }}
 
   update-inventory:
     runs-on: ubuntu-latest
