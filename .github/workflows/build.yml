@@ -10,3 +10,5 @@ jobs:
     with:
       protocol_name: greetings
       package_name: colink-protocol-greetings
+    secrets:
+      SSH_KEY: ${{ secrets.SSH_KEY }}
